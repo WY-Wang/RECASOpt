@@ -6,7 +6,7 @@ import scipy.spatial as scp
 from poap.strategy import BaseStrategy, Proposal
 from ..utils.multiobjective_archives import Record, FrontArchive, SimpleFrontArchive
 from ..utils.multiobjective_utilities import uniform_points, radius_rule
-from ..algorithm.multiobjective_sampling import candidate_dycors, candidate_uniform
+from ..algorithm.multiobjective_sampling import candidate_dycors
 from sklearn.cluster import KMeans
 
 INF = float('inf')
@@ -392,14 +392,7 @@ class RECAS(BaseStrategy):
                 evals=self.num_evals,
                 sampling_radius=self.centers[-1].radius,
                 Xpend=None,
-            )[0] if random.uniform(0.0, 1.0) <= 0.95 else candidate_uniform(
-                num_pts=1,
-                opt_prob=self.opt_prob,
-                surrogate=self.aggregated_surrogate,
-                X=np.copy(self.X),
-                weights=[0.50],
-                Xpend=self.new_x,
-            )
+            )[0]
 
             uniqueness = True
             for xx in self.X:

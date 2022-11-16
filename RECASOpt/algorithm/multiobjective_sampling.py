@@ -42,11 +42,19 @@ def candidate_dycors(num_pts, opt_prob, surrogate, xbest, X, weights, init_evals
     if len(ind) > 0:
         scalefactors[ind] = np.maximum(scalefactors[ind], 1.0)
 
+    prob_perturb = 1.0
+    # Note:
+    # A decreasing perturbation probability (prob_perturb) implements a Dynamically Dimensioned Search (DDS) strategy
+    # proposed by Tolson and Shoemaker (2007). This setting is recommended when using RECAS to solve problems with
+    # high-dimensional decision space.
+    #
+    # Reference: Tolson, B. A., & Shoemaker, C. A. (2007). Dynamically dimensioned search algorithm for computationally
+    # efficient watershed model calibration. Water Resources Research, 43(1).
+    #
     # prob_perturb = min([20.0 / opt_prob.dim, 1.0]) * (1.0 - (
     #     np.log(evals - init_evals + 1.0) / np.log(
     #     max_evals - init_evals + 1)))
     # prob_perturb = max(prob_perturb, min(1.0, 1.0 / opt_prob.dim))
-    prob_perturb = 1.0
 
     if len(subset) == 1:
         ar = np.ones((num_cand, 1))
@@ -61,25 +69,6 @@ def candidate_dycors(num_pts, opt_prob, surrogate, xbest, X, weights, init_evals
         ind = np.where(ar[:, j] == 1)[0]
         cand[ind, i] = stats.norm.rvs(loc=xbest[i], scale=sigma, size=len(ind))
         cand[:, i] = np.minimum(upper, np.maximum(lower, cand[:, i]))
-
-    for i in range(len(cand)):
-        for j in opt_prob.int_var:
-            cand[i, j] = max([min([round(cand[i, j]), opt_prob.ub[j]]), opt_prob.lb[j]])
-
-    return weighted_distance_merit(
-        num_pts=num_pts, surrogate=surrogate, X=X, Xpend=Xpend, cand=cand, dtol=dtol, weights=weights
-    )
-
-
-def candidate_uniform(num_pts, opt_prob, surrogate, X, weights, Xpend=None, subset=None, dtol=1e-3):
-    # Fix default values
-    num_cand = 100*opt_prob.dim
-
-    if subset is None:
-        subset = list(range(opt_prob.dim))
-
-    cand = np.ones((num_cand, opt_prob.dim))
-    cand[:, subset] = np.random.uniform(opt_prob.lb[subset], opt_prob.ub[subset], (num_cand, len(subset)))
 
     for i in range(len(cand)):
         for j in opt_prob.int_var:
