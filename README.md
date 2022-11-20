@@ -1,4 +1,4 @@
-# RECAS: An RBF Surrogate-Assisted Optimizer for Expensive Many-Objective Optimization Problems
+# RECAS: An RBF Surrogate-Based Optimizer for Expensive Many-Objective Optimization Problems
 
 ## Introduction
 
@@ -10,7 +10,7 @@ $$
 
 where $\mathbf{x}$ denotes a vector composed of $d$ decision variables. The search space $\mathcal{D}$ denotes a hypercube in $\mathbb{R}^d$ and it is bounded by a lower bound $\mathbf{l}$ and a upper bound $\mathbf{u} \in \mathbb{R}^d$. $\mathbf{f}$ is composed of $k$ objective functions with $f_i : \mathbb{R}^d \rightarrow \mathbb{R}$ representing the $i$-th objective to be optimized, $i = 1, \dots, k$. In the literature, MOPs with more than three objectives are also known as Many-objective Optimization Problems (MaOPs).
 
-The code in this repo implements an effective Radial Basis Function (RBF) surrogate-assisted algorithm named **RECAS** for computationally expensive multi- and many-objective optimization problem where each objective is assumed to be black-box and expensive-to-evaluate.
+The code in this repo implements an effective Radial Basis Function (RBF) surrogate-based algorithm named **RECAS** for computationally expensive multi- and many-objective optimization problem where each objective is assumed to be black-box and expensive-to-evaluate.
 
 ## Installation
 
